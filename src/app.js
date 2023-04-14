@@ -4,6 +4,7 @@ const sequelize = require('../config/database');
 const aveRoutes = require('./routes/ave');
 const casalRoutes = require('./routes/casal');
 const ninhadaRoutes = require('./routes/ninhada');
+const especieRoutes = require('./routes/especie');
 const cors = require('cors');
 
 const PORT = process.env.port || 3000;
@@ -15,5 +16,6 @@ app.use(express.json());
 app.use(aveRoutes);
 app.use(casalRoutes);
 app.use(ninhadaRoutes);
+app.use(especieRoutes);
 
 app.listen(PORT, () => console.log(`Servidor rodando na porta: ${PORT}`));

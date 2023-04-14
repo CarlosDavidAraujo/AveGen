@@ -5,9 +5,11 @@ const Ninhada = require('../models/ninhada');
 
 exports.createAve = async (req, res) => {
   try {
+    const {especieId, sexo, anilha} = req.body;
     const novaAve = await Ave.create({
-      nome: 'agaporni',
-      sexo: 'femea'
+      especieId,
+      sexo,
+      anilha
     });
     res.status(201).json(novaAve);
   } catch (error) {
@@ -60,22 +62,23 @@ exports.deleteAve = async (req, res) => {
 exports.getAve = async (req, res) => {
   try {
     const { id } = req.params;
-    const ave = await Ave.findByPk(id);
+    const ave = await Ave.findByPk(id, {
+      include: [Casal, Ninhada]
+    });
     if (!ave) {
       return res.send('Ave não encontrada');
     }
-    const casalDeOrigem = await Casal.findByPk(ave.casal_de_origem);
+    //const casalDeOrigem = await Casal.findByPk(ave.casal_de_origem);
     const casaisRelacionados = await Casal.findAll({
       where: {
         [Op.or]: {
-          macho: ave.id,
-          femea: ave.id
+          macho_id: ave.id,
+          femea_id: ave.id
         }
       }
     });
     res.status(201).json({
       ave,
-      casalDeOrigem,
       casaisRelacionados
     });
   }
